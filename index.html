@@ -112,7 +112,6 @@ section.lager > h2{font-size:13px;font-family:var(--mono);letter-spacing:.16em;t
 .psu-id{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;color:var(--ink);border-bottom:1px solid var(--rule-hair);padding-bottom:7px;margin-bottom:8px}
 .psu-spec{font-family:var(--mono);font-size:12px;color:var(--steel);line-height:1.85}
 .psu-spec b{color:var(--ink)}
-.psu-flag{margin-top:9px;font-size:12px;background:var(--amber-bg);border-left:3px solid var(--amber);padding:6px 9px;color:#7A5800;line-height:1.4}
 
 section.summary{margin-top:38px;border-top:2px solid var(--ink);padding-top:20px}
 section.summary h2{font-size:13px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
@@ -139,7 +138,44 @@ table.result td.mono{font-family:var(--mono)}
   .note{animation:rise .18s ease-out}
   @keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 }
-@media print{nav.tickets,.actions,.links,section.lager,button{display:none!important} body{background:#fff} .ticket{page-break-inside:avoid}}
+
+/* ============ Druckansicht ============ */
+#printSheet{display:none}
+
+@media print{
+  @page{size:A4 portrait;margin:15mm 14mm}
+  html,body{background:#fff !important;color:#000 !important;font-size:10pt;line-height:1.35}
+  .wrap{max-width:none;padding:0;margin:0}
+  .wrap > *{display:none !important}
+  #printSheet{display:block !important}
+
+  #printSheet .ph{border-bottom:1.5pt solid #000;padding-bottom:6pt;margin-bottom:10pt}
+  #printSheet .ph h2{font-size:15pt;margin:0 0 3pt;letter-spacing:-.01em}
+  #printSheet .ph .sub{font-size:8.5pt;color:#333;margin:0}
+  #printSheet .idbar{display:flex;gap:14pt;margin-top:8pt;font-size:9pt}
+  #printSheet .idbar span{flex:1;border-bottom:.6pt solid #000;padding-bottom:2pt}
+
+  #printSheet .pcard{border:.8pt solid #000;margin-bottom:7pt;page-break-inside:avoid;break-inside:avoid}
+  #printSheet .pcard .top{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:.6pt solid #000;padding:4pt 6pt;background:#F0F0F0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printSheet .pcard .top b{font-size:10.5pt}
+  #printSheet .pcard .top .st{font-size:8pt;letter-spacing:.08em;text-transform:uppercase}
+
+  #printSheet table.pv{width:100%;border-collapse:collapse;font-size:9pt}
+  #printSheet table.pv th{width:24%;text-align:left;font-weight:600;padding:3pt 6pt;
+    border-bottom:.4pt solid #BBB;border-right:.4pt solid #BBB;vertical-align:top}
+  #printSheet table.pv td{padding:3pt 6pt;border-bottom:.4pt solid #BBB;
+    font-family:var(--mono);font-size:9pt;vertical-align:top}
+  #printSheet table.pv tr:last-child th,#printSheet table.pv tr:last-child td{border-bottom:0}
+
+  #printSheet .ptail{margin-top:12pt;padding-top:8pt;border-top:1.5pt solid #000;page-break-inside:avoid}
+  #printSheet .ptail h3{font-size:9pt;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6pt}
+  #printSheet table.pl{width:100%;border-collapse:collapse;font-size:8.5pt}
+  #printSheet table.pl th{text-align:left;font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;
+    padding:3pt 5pt;border-bottom:.8pt solid #000}
+  #printSheet table.pl td{padding:2.5pt 5pt;border-bottom:.4pt solid #CCC;font-family:var(--mono)}
+  #printSheet .foot{margin-top:8pt;font-size:8pt;color:#444;display:flex;justify-content:space-between}
+}
 </style>
 </head>
 <body>
@@ -182,6 +218,8 @@ table.result td.mono{font-family:var(--mono)}
   </div>
 </section>
 
+<section id="printSheet"></section>
+
 </div>
 
 <script>
@@ -192,8 +230,8 @@ const LAPTOPS = [
   {
     id:"A1", modell:"MSI Pulse 17 B13VGK", chassis:"Gehäusenummer MS-17L5",
     kontext:"Gebraucht gekauft, ohne Netzteil. Kein Typenschild mehr lesbar.",
-    volt:20, ampere:12, watt:240,
-    anschluss:"hohl", aussen:4.5, innen:2.9,
+    werte:[{volt:20, ampere:12, watt:240}],
+    watt:240, anschluss:"hohl", masse:[{aussen:4.5, innen:2.9}], hohlVolt:[20],
     links:[
       {t:"Herstellerangaben", u:"https://de.msi.com/Laptop/Pulse-17-B13VX/Specification"},
       {t:"Handbuch (PDF)", u:"https://download-2.msi.com/archive/mnu_exe/nb/MS-1585_MS-17L5_v2.0_German.pdf"},
@@ -205,8 +243,8 @@ const LAPTOPS = [
   {
     id:"A2", modell:"ASUS TUF Gaming A15 FA507XI", chassis:"Modelljahr 2023 · RTX 4070",
     kontext:"Schulgerät. Das Netzteil wurde verliehen und ist nicht zurückgekommen.",
-    volt:20, ampere:12, watt:240,
-    anschluss:"beides", aussen:6.0, innen:3.7,
+    werte:[{volt:20, ampere:12, watt:240}],
+    watt:240, anschluss:"beides", masse:[{aussen:6.0, innen:3.7}], hohlVolt:[20],
     links:[
       {t:"Herstellerangaben", u:"https://www.asus.com/de/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-a15-2023/techspec/"},
       {t:"Handbuch", u:"https://www.asus.com/de/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-a15-2023/helpdesk_manual?model2Name=FA507XI"},
@@ -217,8 +255,8 @@ const LAPTOPS = [
   {
     id:"A3", modell:"ASUS TUF Gaming A15 FA507RE", chassis:"Modelljahr 2022 · RTX 3050 Ti",
     kontext:"Vorgängerbaureihe zu A2. Der Kunde fragt, ob ein Netzteil für beide Geräte reicht.",
-    volt:20, ampere:10, watt:200,
-    anschluss:"hohl", aussen:6.0, innen:3.7,
+    werte:[{volt:20, ampere:10, watt:200}],
+    watt:200, anschluss:"hohl", masse:[{aussen:6.0, innen:3.7}], hohlVolt:[20],
     links:[
       {t:"Herstellerangaben", u:"https://www.asus.com/de/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-a15-2022/techspec/"},
       {t:"Handbuch", u:"https://www.asus.com/de/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-a15-2022/helpdesk_manual?model2Name=ASUS-TUF-Gaming-A15-2022"},
@@ -229,58 +267,84 @@ const LAPTOPS = [
   {
     id:"A4", modell:"Acer Aspire 5 A515-51", chassis:"Modelljahr 2017",
     kontext:"Altgerät aus dem Sekretariat, soll im Materialraum weiterlaufen.",
-    volt:19, ampere:3.42, watt:65,
-    anschluss:"hohl", aussen:5.5, innen:1.7,
+    werte:[{volt:19, ampere:3.42, watt:65}],
+    watt:65, anschluss:"hohl", masse:[{aussen:5.5, innen:1.7}], hohlVolt:[19],
     links:[], selbst:true,
     tipp:"Suche Herstellerangaben und Handbuch selbst, danach das Steckermaß."
   },
   {
     id:"A5", modell:"Acer Aspire 5 A515-57", chassis:"Modelljahr 2022",
     kontext:"Neueres Gerät derselben Serie. Ein Kollege meint, das Netzteil von A4 müsse passen, beide haben 65 W.",
-    volt:19, ampere:3.42, watt:65,
-    anschluss:"hohl", aussen:3.0, innen:1.1,
+    werte:[{volt:19, ampere:3.42, watt:65}],
+    watt:65, anschluss:"hohl", masse:[{aussen:3.0, innen:1.1}], hohlVolt:[19],
     links:[], selbst:true,
     tipp:"Gleicher Hersteller, gleiche Serie, gleiche elektrische Werte wie A4. Prüfe das Steckermaß trotzdem selbst."
   },
   {
     id:"A6", modell:"HP ProBook 450 G9", chassis:"Business-Notebook",
     kontext:"Firmengerät. Der Kunde hat mehrere USB-C-Netzteile im Schrank und fragt, ob eines davon reicht.",
-    volt:20, ampere:3.25, watt:65,
-    anschluss:"beides", aussen:4.5, innen:3.0, hohlVolt:19.5,
+    werte:[{volt:20, ampere:3.25, watt:65}, {volt:19.5, ampere:3.33, watt:65}],
+    watt:65, anschluss:"beides",
+    masse:[{aussen:4.5, innen:3.0}, {aussen:4.5, innen:2.9}], hohlVolt:[19.5],
     links:[], selbst:true,
-    tipp:"Sieh dir die Anschlussliste genau an. Dieses Gerät hat zwei Wege, Strom zu bekommen. Trage die Werte des serienmäßigen Netzteils ein."
+    tipp:"Sieh dir die Anschlussliste genau an. Dieses Gerät hat zwei Wege, Strom zu bekommen, und für beide gibt es ein serienmäßiges Netzteil. Die Werte eines der beiden reichen."
   }
 ];
 
 /* ===================== Lager ===================== */
 const PSUS = [
-  {id:"N01", volt:20,   ampere:12,   watt:240, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"},
+  {id:"N01", volt:20,   ampere:9,    watt:180, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"},
   {id:"N02", volt:20,   ampere:12,   watt:240, art:"hohl", aussen:6.0, innen:3.7, stift:"ja"},
-  {id:"N03", volt:20,   ampere:10,   watt:200, art:"hohl", aussen:6.0, innen:3.7, stift:"ja"},
-  {id:"N04", volt:19,   ampere:3.42, watt:65,  art:"hohl", aussen:5.5, innen:1.7, stift:"nein"},
-  {id:"N05", volt:19,   ampere:3.42, watt:65,  art:"hohl", aussen:3.0, innen:1.1, stift:"nein"},
-  {id:"N06", volt:20,   ampere:3.25, watt:65,  art:"usbc"},
-  {id:"N07", volt:20,   ampere:9,    watt:180, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"},
-  {id:"N08", volt:19,   ampere:2.37, watt:45,  art:"hohl", aussen:5.5, innen:1.7, stift:"nein"},
-  {id:"N09", volt:20,   ampere:12,   watt:240, art:"hohl", aussen:6.1, innen:3.3, stift:"ja"},
-  {id:"N10", volt:19.5, ampere:3.33, watt:65,  art:"hohl", aussen:4.5, innen:3.0, stift:"ja"},
-  {id:"N11", volt:20,   ampere:2.25, watt:45,  art:"usbc"},
-  {id:"N12", volt:20,   ampere:11.5, watt:230, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"}
+  {id:"N03", volt:20,   ampere:3.25, watt:65,  art:"usbc"},
+  {id:"N04", volt:20,   ampere:12,   watt:240, art:"hohl", aussen:6.1, innen:3.3, stift:"ja"},
+  {id:"N05", volt:19,   ampere:3.42, watt:65,  art:"hohl", aussen:5.5, innen:1.7, stift:"nein"},
+  {id:"N06", volt:19,   ampere:2.37, watt:45,  art:"hohl", aussen:5.5, innen:1.7, stift:"nein"},
+  {id:"N07", volt:20,   ampere:12,   watt:240, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"},
+  {id:"N08", volt:20,   ampere:11.5, watt:230, art:"hohl", aussen:4.5, innen:2.9, stift:"ja"},
+  {id:"N09", volt:19,   ampere:3.42, watt:65,  art:"hohl", aussen:3.0, innen:1.1, stift:"nein"},
+  {id:"N10", volt:20,   ampere:2.25, watt:45,  art:"usbc"},
+  {id:"N11", volt:20,   ampere:10,   watt:200, art:"hohl", aussen:6.0, innen:3.7, stift:"ja"},
+  {id:"N12", volt:19.5, ampere:3.33, watt:65,  art:"hohl", aussen:4.5, innen:3.0, stift:"ja"}
 ];
 
 /* ===================== Zustand ===================== */
 const leer = () => ({volt:"",ampere:"",watt:"",anschluss:"",aussen:"",innen:"",psu:"",s1:null,s2:null,s3:null,m1:[],m2:[],m3:[]});
 const state = {};
-LAPTOPS.forEach(l => state[l.id] = leer());
+LAPTOPS.forEach(function(l){ state[l.id] = leer(); });
 let aktiv = LAPTOPS[0].id;
 
 /* ===================== Helfer ===================== */
 const nf = n => (n===null||n===undefined) ? "?" : String(n).replace(".", ",");
 const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isNaN(x)?null:x; };
 const nah = (a,b) => a!==null && b!==null && Math.abs(a-b) < 0.051;
+const nahMM = (a,b) => a!==null && b!==null && Math.abs(a-b) < 0.151;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const hatHohl = l => l.anschluss === "hohl" || l.anschluss === "beides";
 const artName = a => a==="hohl" ? "Hohlstecker" : a==="usbc" ? "USB-C mit Power Delivery" : "Hohlstecker und USB-C";
+
+/* passendste Wertevariante finden, damit die Häkchen sinnvoll gesetzt werden */
+function besterSatz(l, s){
+  let best = l.werte[0], score = -1;
+  l.werte.forEach(function(w){
+    let k = 0;
+    if(nah(num(s.volt), w.volt)) k++;
+    if(nah(num(s.ampere), w.ampere)) k++;
+    if(nah(num(s.watt), w.watt)) k++;
+    if(k > score){ score = k; best = w; }
+  });
+  return best;
+}
+function bestesMass(l, s){
+  if(!l.masse.length) return null;
+  let best = l.masse[0], score = -1;
+  l.masse.forEach(function(mm){
+    let k = 0;
+    if(nahMM(num(s.aussen), mm.aussen)) k++;
+    if(nahMM(num(s.innen), mm.innen)) k++;
+    if(k > score){ score = k; best = mm; }
+  });
+  return best;
+}
 
 /* ===================== Querschnitt ===================== */
 function gaugeSVG(aussen, innen){
@@ -321,7 +385,6 @@ function markHTML(flag){
   if(flag===null||flag===undefined) return "";
   return '<span class="mark '+(flag?"ok":"bad")+'">'+(flag?"✓":"✕")+'</span>';
 }
-
 function noteHTML(art, zeilen){
   if(art===null||!zeilen.length) return "";
   return '<div class="note '+(art?"ok":"bad")+'"><ul>'+zeilen.map(function(z){return '<li>'+z+'</li>';}).join("")+'</ul></div>';
@@ -331,6 +394,8 @@ function renderTicket(){
   const l = LAPTOPS.find(function(x){return x.id===aktiv;});
   const s = state[aktiv];
   const zeigeMasse = s.anschluss==="hohl" || s.anschluss==="beides";
+  const w = besterSatz(l, s);
+  const mm = bestesMass(l, s);
 
   const psuOptions = PSUS.map(function(p){
     const belegt = Object.keys(state).find(function(k){return k!==aktiv && state[k].psu===p.id;});
@@ -346,20 +411,18 @@ function renderTicket(){
   + '<div class="auftragsnr">Auftrag '+l.id+'</div></div>'
   + '<div class="kontext"><b>Auftragslage</b>'+esc(l.kontext)+'</div>';
 
-  /* Schritt 1 */
   html += '<div class="step"><div class="step-head"><span class="step-no">SCHRITT 1</span><h3>Elektrische Werte ermitteln</h3>'
     + (s.s1===null?"":'<span class="stamp '+(s.s1?"ok":"bad")+'">'+(s.s1?"geprüft":"noch falsch")+'</span>')
     + '</div><p class="step-note">'+esc(l.tipp)+'</p>'
     + (l.selbst?'<div class="selfsearch">Für dieses Gerät sind keine Links hinterlegt. Suche Herstellerangaben und Handbuch selbst.</div>':"")
     + (l.links.length?'<div class="links">'+l.links.map(function(a){return '<a href="'+a.u+'" target="_blank" rel="noopener">'+esc(a.t)+'</a>';}).join("")+'</div>':"")
     + '<div class="fields">'
-    + '<div class="field"><label for="f-volt">Spannung</label><div class="inputrow"><input id="f-volt" inputmode="decimal" value="'+esc(s.volt)+'" placeholder=""><span class="unit">V</span>'+markHTML(s.s1===null?null:nah(num(s.volt),l.volt))+'</div></div>'
-    + '<div class="field"><label for="f-amp">Stromstärke</label><div class="inputrow"><input id="f-amp" inputmode="decimal" value="'+esc(s.ampere)+'" placeholder=""><span class="unit">A</span>'+markHTML(s.s1===null?null:nah(num(s.ampere),l.ampere))+'</div></div>'
-    + '<div class="field"><label for="f-watt">Leistung</label><div class="inputrow"><input id="f-watt" inputmode="decimal" value="'+esc(s.watt)+'" placeholder=""><span class="unit">W</span>'+markHTML(s.s1===null?null:nah(num(s.watt),l.watt))+'</div></div>'
+    + '<div class="field"><label for="f-volt">Spannung</label><div class="inputrow"><input id="f-volt" inputmode="decimal" value="'+esc(s.volt)+'" placeholder=""><span class="unit">V</span>'+markHTML(s.s1===null?null:nah(num(s.volt),w.volt))+'</div></div>'
+    + '<div class="field"><label for="f-amp">Stromstärke</label><div class="inputrow"><input id="f-amp" inputmode="decimal" value="'+esc(s.ampere)+'" placeholder=""><span class="unit">A</span>'+markHTML(s.s1===null?null:nah(num(s.ampere),w.ampere))+'</div></div>'
+    + '<div class="field"><label for="f-watt">Leistung</label><div class="inputrow"><input id="f-watt" inputmode="decimal" value="'+esc(s.watt)+'" placeholder=""><span class="unit">W</span>'+markHTML(s.s1===null?null:nah(num(s.watt),w.watt))+'</div></div>'
     + '<div class="field"><button class="check" id="btn1">Werte prüfen</button></div>'
     + '</div>' + noteHTML(s.s1, s.m1) + '</div>';
 
-  /* Schritt 2 */
   html += '<div class="step"><div class="step-head"><span class="step-no">SCHRITT 2</span><h3>Anschluss bestimmen</h3>'
     + (s.s2===null?"":'<span class="stamp '+(s.s2?"ok":"bad")+'">'+(s.s2?"geprüft":"noch falsch")+'</span>')
     + '</div><p class="step-note">Steckermaße stehen in keinem vollständigen Herstellerdatenblatt. Recherchiere sie über die Modell- oder Gehäusenummer.</p>'
@@ -371,8 +434,8 @@ function renderTicket(){
 
   if(zeigeMasse){
     html += '<div class="fields">'
-      + '<div class="field"><label for="f-aus">Außendurchmesser</label><div class="inputrow"><input id="f-aus" inputmode="decimal" value="'+esc(s.aussen)+'" placeholder=""><span class="unit">mm</span>'+markHTML(s.s2===null?null:nah(num(s.aussen),l.aussen))+'</div></div>'
-      + '<div class="field"><label for="f-inn">Innendurchmesser</label><div class="inputrow"><input id="f-inn" inputmode="decimal" value="'+esc(s.innen)+'" placeholder=""><span class="unit">mm</span>'+markHTML(s.s2===null?null:nah(num(s.innen),l.innen))+'</div></div>'
+      + '<div class="field"><label for="f-aus">Außendurchmesser</label><div class="inputrow"><input id="f-aus" inputmode="decimal" value="'+esc(s.aussen)+'" placeholder=""><span class="unit">mm</span>'+markHTML(s.s2===null||!mm?null:nahMM(num(s.aussen),mm.aussen))+'</div></div>'
+      + '<div class="field"><label for="f-inn">Innendurchmesser</label><div class="inputrow"><input id="f-inn" inputmode="decimal" value="'+esc(s.innen)+'" placeholder=""><span class="unit">mm</span>'+markHTML(s.s2===null||!mm?null:nahMM(num(s.innen),mm.innen))+'</div></div>'
       + '<div class="field"><button class="check" id="btn2">Anschluss prüfen</button></div></div>'
       + '<div class="gauge">'+gaugeSVG(num(s.aussen), num(s.innen))
       + '<div class="gauge-read">Querschnitt maßstäblich<br>Außen <b>'+nf(num(s.aussen))+'</b> mm · Innen <b>'+nf(num(s.innen))+'</b> mm</div></div>';
@@ -385,7 +448,6 @@ function renderTicket(){
   }
   html += noteHTML(s.s2, s.m2) + '</div>';
 
-  /* Schritt 3 */
   html += '<div class="step"><div class="step-head"><span class="step-no">SCHRITT 3</span><h3>Netzteil zuordnen</h3>'
     + (s.s3===null?"":'<span class="stamp '+(s.s3?"ok":"bad")+'">'+(s.s3?"geprüft":"noch falsch")+'</span>')
     + '</div><p class="step-note">Jedes Netzteil ist einmal vorhanden. Belegte Positionen sind gesperrt.</p>'
@@ -404,8 +466,7 @@ function renderPSUs(){
     const spec = p.art==="usbc"
       ? 'Ausgang <b>USB-C</b> (Power Delivery)<br>max. <b>'+nf(p.volt)+' V</b> · <b>'+nf(p.ampere)+' A</b> · <b>'+nf(p.watt)+' W</b><br>Steckermaß entfällt'
       : 'Ausgang <b>'+nf(p.volt)+' V</b> · <b>'+nf(p.ampere)+' A</b> · <b>'+nf(p.watt)+' W</b><br>Hohlstecker <b>'+nf(p.aussen)+' × '+nf(p.innen)+' mm</b><br>Stift im Stecker: '+p.stift;
-    return '<div class="psu"><div class="psu-id">'+p.id+'</div><div class="psu-spec">'+spec+'</div>'
-      + (p.flag?'<div class="psu-flag">'+esc(p.flag)+'</div>':"")+'</div>';
+    return '<div class="psu"><div class="psu-id">'+p.id+'</div><div class="psu-spec">'+spec+'</div></div>';
   }).join("");
 }
 
@@ -419,20 +480,69 @@ function renderSummary(){
       : '<span class="tag open">offen</span>';
     return '<tr><td class="mono">'+l.id+'</td><td>'+esc(l.modell)+'</td><td class="mono">'+(s.psu||"")+'</td><td>'+tag+'</td></tr>';
   }).join("");
+  renderPrint(fertig);
+}
+
+/* ===================== Druckansicht ===================== */
+function renderPrint(fertig){
+  const heute = new Date().toLocaleDateString("de-DE");
+
+  let out = '<div class="ph"><h2>Netzteil-Zuordnung: Werkstattaufträge</h2>'
+    + '<p class="sub">Ermittelte Werte und Zuordnung, sechs Aufträge</p>'
+    + '<div class="idbar"><span>Name:</span><span>Klasse:</span><span>Datum:</span></div></div>';
+
+  LAPTOPS.forEach(function(l){
+    const s = state[l.id];
+    const st = stufe(l.id);
+    const status = st==="pass" ? "erfüllt" : st==="fail" ? "Fehler" : "offen";
+    const anschluss = s.anschluss ? artName(s.anschluss) : "";
+    const masse = (s.anschluss==="hohl"||s.anschluss==="beides")
+      ? (nf(num(s.aussen))+" × "+nf(num(s.innen))+" mm").replace(/\?/g,"__")
+      : (s.anschluss==="usbc" ? "entfällt" : "");
+    const werte = [s.volt?s.volt+" V":"__ V", s.ampere?s.ampere+" A":"__ A", s.watt?s.watt+" W":"__ W"].join("  ·  ");
+
+    out += '<div class="pcard"><div class="top"><b>'+esc(l.id)+'  '+esc(l.modell)+'</b>'
+      + '<span class="st">'+status+'</span></div>'
+      + '<table class="pv">'
+      + '<tr><th>Gehäuse</th><td>'+esc(l.chassis)+'</td></tr>'
+      + '<tr><th>Elektrische Werte</th><td>'+esc(werte)+'</td></tr>'
+      + '<tr><th>Anschlussart</th><td>'+esc(anschluss||"__")+'</td></tr>'
+      + '<tr><th>Steckermaß</th><td>'+esc(masse||"__")+'</td></tr>'
+      + '<tr><th>Netzteil</th><td>'+esc(s.psu||"__")+'</td></tr>'
+      + '</table></div>';
+  });
+
+  out += '<div class="ptail"><h3>Lagerbestand</h3><table class="pl">'
+    + '<thead><tr><th>Nr.</th><th>Spannung</th><th>Strom</th><th>Leistung</th><th>Anschluss</th><th>Stift</th></tr></thead><tbody>';
+  PSUS.forEach(function(p){
+    out += '<tr><td>'+p.id+'</td><td>'+nf(p.volt)+' V</td><td>'+nf(p.ampere)+' A</td><td>'+nf(p.watt)+' W</td>'
+      + '<td>'+(p.art==="usbc" ? "USB-C PD" : "Hohl "+nf(p.aussen)+" × "+nf(p.innen)+" mm")+'</td>'
+      + '<td>'+(p.art==="usbc" ? "" : p.stift)+'</td></tr>';
+  });
+  out += '</tbody></table>'
+    + '<div class="foot"><span>'+fertig+' von 6 Aufträgen erfüllt</span><span>'+heute+'</span></div></div>';
+
+  document.getElementById("printSheet").innerHTML = out;
 }
 
 /* ===================== Prüfungen ===================== */
 function pruefe1(){
   const l = LAPTOPS.find(function(x){return x.id===aktiv;}), s = state[aktiv], m=[];
-  const okV=nah(num(s.volt),l.volt), okA=nah(num(s.ampere),l.ampere), okW=nah(num(s.watt),l.watt);
-  if(okV&&okA&&okW){
-    m.push('Alle drei Werte stimmen: <code>'+nf(l.volt)+' V</code> × <code>'+nf(l.ampere)+' A</code> = <code>'+nf(l.watt)+' W</code>.');
+  const v=num(s.volt), a=num(s.ampere), wt=num(s.watt);
+  const treffer = l.werte.filter(function(w){
+    return nah(v,w.volt) && nah(a,w.ampere) && nah(wt,w.watt);
+  })[0];
+
+  if(treffer){
+    m.push('Alle drei Werte stimmen: <code>'+nf(treffer.volt)+' V</code> × <code>'+nf(treffer.ampere)+' A</code> = <code>'+nf(treffer.watt)+' W</code>.');
+    if(l.werte.length>1) m.push('Für dieses Gerät gibt es zwei gültige Wertesätze. Der zweite gehört zum anderen Ladeweg.');
   } else {
-    if(!okV) m.push('Spannung stimmt nicht. Suche die Zeile zur Stromversorgung im Handbuch oder Datenblatt.');
-    if(!okA) m.push('Stromstärke stimmt nicht.');
-    if(!okW) m.push('Leistung stimmt nicht. Rechenweg: Spannung × Stromstärke = Leistung.');
+    const w = besterSatz(l, s);
+    if(!nah(v,w.volt)) m.push('Spannung stimmt nicht.');
+    if(!nah(a,w.ampere)) m.push('Stromstärke stimmt nicht.');
+    if(!nah(wt,w.watt)) m.push('Leistung stimmt nicht. Rechenweg: Spannung × Stromstärke = Leistung.');
   }
-  s.s1 = okV&&okA&&okW; s.m1 = m;
+  s.s1 = !!treffer; s.m1 = m;
   renderTicket(); renderTabs(); renderSummary();
 }
 
@@ -450,8 +560,9 @@ function pruefe2(){
     m.push('Anschlussart richtig: '+artName(l.anschluss)+'.');
   }
   if(ok && hatHohl(l)){
-    const okAu=nah(num(s.aussen),l.aussen), okIn=nah(num(s.innen),l.innen);
-    if(okAu&&okIn) m.push('Steckermaß <code>'+nf(l.aussen)+' × '+nf(l.innen)+' mm</code> korrekt recherchiert.');
+    const au=num(s.aussen), inn=num(s.innen);
+    const tr = l.masse.filter(function(mm){ return nahMM(au,mm.aussen) && nahMM(inn,mm.innen); })[0];
+    if(tr) m.push('Steckermaß <code>'+nf(tr.aussen)+' × '+nf(tr.innen)+' mm</code> korrekt recherchiert.');
     else if(l.selbst){ ok=false; m.push('Steckermaß stimmt noch nicht.'); }
     else { ok=false; m.push('Steckermaß stimmt nicht. Herstellerdatenblätter bemaßen den Stecker nicht vollständig. Nutze eine Ersatzteil-Datenbank und suche über die Modell- oder Gehäusenummer.'); }
   }
@@ -472,10 +583,10 @@ function pruefe3(){
     if(l.anschluss==="usbc"){
       gruende.push('das Gerät hat keine Hohlbuchse');
     } else {
-      const sollV = (l.hohlVolt!==undefined) ? l.hohlVolt : l.volt;
-      if(!nah(p.volt, sollV)) gruende.push('Spannung '+nf(p.volt)+' V statt '+nf(sollV)+' V');
-      if(!(nah(p.aussen,l.aussen) && nah(p.innen,l.innen)))
-        gruende.push('Stecker '+nf(p.aussen)+' × '+nf(p.innen)+' mm passt nicht in '+nf(l.aussen)+' × '+nf(l.innen)+' mm');
+      const voltOk = l.hohlVolt.some(function(x){ return nah(p.volt, x); });
+      const massOk = l.masse.some(function(mm){ return nahMM(p.aussen, mm.aussen) && nahMM(p.innen, mm.innen); });
+      if(!voltOk) gruende.push('Spannung '+nf(p.volt)+' V statt '+l.hohlVolt.map(nf).join(' oder ')+' V');
+      if(!massOk) gruende.push('Stecker '+nf(p.aussen)+' × '+nf(p.innen)+' mm passt nicht');
     }
     if(p.watt < l.watt) gruende.push(nf(p.watt)+' W reichen nicht für '+nf(l.watt)+' W');
   }
@@ -486,8 +597,10 @@ function pruefe3(){
   } else {
     s.s3=true;
     const zeilen=[p.id+' erfüllt alle Kriterien.'];
-    if(l.anschluss==="beides" && p.art==="hohl")
+    if(l.anschluss==="beides" && p.art==="hohl" && l.watt>100)
       zeilen.push('Über USB-C ließe sich das Gerät ebenfalls laden. Bei '+nf(l.watt)+' W Bedarf liefert aber nur der Hohlstecker die volle Leistung.');
+    if(l.anschluss==="beides" && p.art==="hohl" && l.watt<=100)
+      zeilen.push('Auch über USB-C wäre dieses Gerät zu versorgen. Beide Wege sind hier gültig.');
     if(l.anschluss==="beides" && p.art==="usbc")
       zeilen.push('Auch der Hohlstecker wäre ein gültiger Weg. USB-C hat den Vorteil, dass ein Netzteil mehrere Geräte versorgen kann.');
     if(p.watt > l.watt)
@@ -509,13 +622,14 @@ function bind(){
         const neu=document.getElementById(id);
         if(neu){ neu.focus(); try{ neu.setSelectionRange(pos,pos); }catch(_){} }
       }
+      renderPrint(LAPTOPS.filter(function(x){return stufe(x.id)==="pass";}).length);
     });
   }
   on("f-volt","volt"); on("f-amp","ampere"); on("f-watt","watt");
   on("f-aus","aussen",true); on("f-inn","innen",true);
 
   Array.prototype.forEach.call(document.querySelectorAll('input[name="ansch"]'), function(r){
-    r.addEventListener("change", function(e){ s.anschluss=e.target.value; renderTicket(); });
+    r.addEventListener("change", function(e){ s.anschluss=e.target.value; renderTicket(); renderSummary(); });
   });
   const sel=document.getElementById("f-psu");
   if(sel) sel.addEventListener("change", function(e){ s.psu=e.target.value; renderSummary(); });
