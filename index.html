@@ -653,5 +653,50 @@ document.getElementById("resetAll").addEventListener("click", function(){
 
 renderTabs(); renderTicket(); renderPSUs(); renderSummary();
 </script>
+<!-- vt-speicher -->
+<script>
+/* Bearbeitungsstand speichern: Eingaben, Pruefergebnisse und Zuordnungen bleiben beim Neuladen erhalten */
+(function(){
+  var KEY = 'bsfi-netzteil:stand';
+  var store = null;
+  try { store = window.localStorage; store.setItem(KEY + '_t', '1'); store.removeItem(KEY + '_t'); }
+  catch (e) { store = null; }
+  if (!store) { return; }
+
+  function pristine(){
+    var p = JSON.stringify(leer());
+    return aktiv === LAPTOPS[0].id && LAPTOPS.every(function(l){ return JSON.stringify(state[l.id]) === p; });
+  }
+  function save(){
+    try {
+      if (pristine()) { store.removeItem(KEY); }
+      else { store.setItem(KEY, JSON.stringify({ a: aktiv, s: state })); }
+    } catch (e) {}
+  }
+
+  try {
+    var raw = store.getItem(KEY);
+    if (raw) {
+      var d = JSON.parse(raw);
+      LAPTOPS.forEach(function(l){
+        if (d.s && d.s[l.id]) { state[l.id] = Object.assign(leer(), d.s[l.id]); }
+      });
+      if (d.a && state[d.a]) { aktiv = d.a; }
+      renderTabs(); renderTicket(); renderPSUs(); renderSummary();
+      renderPrint(LAPTOPS.filter(function(x){ return stufe(x.id) === 'pass'; }).length);
+    }
+  } catch (e) {}
+
+  var timer = null;
+  function queue(){
+    if (timer) { clearTimeout(timer); }
+    timer = setTimeout(save, 400);
+  }
+  document.addEventListener('input', queue, true);
+  document.addEventListener('change', queue, true);
+  document.addEventListener('click', queue, true);
+  window.addEventListener('pagehide', save);
+})();
+</script>
 </body>
 </html>
