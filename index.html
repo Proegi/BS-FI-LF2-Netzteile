@@ -594,6 +594,9 @@ function pruefe3(){
   if(gruende.length){
     s.s3=false;
     s.m3=[ l.selbst ? p.id+' passt nicht.' : p.id+' passt nicht: '+gruende.join(' · ')+'.' ];
+    if(l.id==="A4" && p.id==="N06"){
+      s.m3.push('<b>Sonderfall:</b> ipc-computer.de führt dieses 45-W-Netzteil tatsächlich als „Original Netzteil“ für die Aspire 5 (A515-51) – auf derselben Produktseite wie das 65-W-Netzteil. Grund: Acer hat unter diesem Modellnamen mehrere Ausstattungsvarianten mit unterschiedlicher Original-Wattzahl verkauft. Referenz für dieses Gerät ist die Werksangabe 65 W (Original-Teilenummer PA-1650-86, 19 V / 3,42 A). Ein Netzteil mit weniger Wattzahl als diese Referenz reicht nicht, auch wenn Stecker und Spannung passen.');
+    }
   } else {
     s.s3=true;
     const zeilen=[p.id+' erfüllt alle Kriterien.'];
